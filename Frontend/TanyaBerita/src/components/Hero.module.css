@@ -1,0 +1,43 @@
+.hero {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding-top: 40px;
+  padding-bottom: 60px;
+}
+
+.heroText {
+  flex: 1;
+}
+
+.heroText h1 {
+  font-size: 2.5rem;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.heroText p {
+  font-size: 1.1rem;
+  color: var(--color-dark-gray);
+  margin-bottom: 2rem;
+}
+
+.heroButton {
+  padding: 12px 28px;
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.heroImage {
+  flex: 1;
+}
+
+.heroImage img {
+  width: 100%;
+  max-width: 450px;
+}
