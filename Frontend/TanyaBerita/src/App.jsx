@@ -1,29 +1,9 @@
 import React from 'react';
 import Header from './components/Header';
 import CategoryCard from './components/CategoryCard';
-
-// Perhatikan: Tidak ada lagi import untuk gambar di sini
+import categories from './pages/categoriesData';
 
 function App() {
-  // Path ikon sekarang menjadi string langsung
-  const categories = [
-    { label: "Berita Umum", icon: "/icons/berita.png", bgColor: 'bg-tanya-grey', textColor: 'text-black' },
-    { label: "Nasional", icon: "/icons/nasional.png", bgColor: 'bg-tanya-yellow', textColor: 'text-white' },
-    { label: "Internasional", icon: "/icons/internasional.png", bgColor: 'bg-tanya-grey', textColor: 'text-black' },
-    { label: "Politik", icon: "/icons/politik.png", bgColor: 'bg-tanya-yellow', textColor: 'text-white' },
-    { label: "Teknologi", icon: "/icons/teknologi.png", bgColor: 'bg-tanya-grey', textColor: 'text-black' },
-    { label: "Hiburan", icon: "/icons/hiburan.png", bgColor: 'bg-tanya-yellow', textColor: 'text-white' },
-    { label: "Olahraga", icon: "/icons/olahraga.png", bgColor: 'bg-tanya-grey', textColor: 'text-black' },
-    { label: "Kesehatan", icon: "/icons/kesehatan.png", bgColor: 'bg-tanya-yellow', textColor: 'text-white' },
-    { label: "Pendidikan", icon: "/icons/pendidikan.png", bgColor: 'bg-tanya-grey', textColor: 'text-black' },
-    { label: "Lifestyle (Gaya Hidup)", icon: "/icons/lifestyle.png", bgColor: 'bg-tanya-yellow', textColor: 'text-white' },
-    { label: "Otomotif", icon: "/icons/otomotif.png", bgColor: 'bg-tanya-grey', textColor: 'text-black' },
-    { label: "Hukum & Kriminal", icon: "/icons/hukum.png", bgColor: 'bg-tanya-yellow', textColor: 'text-white' },
-    { label: "Lingkungan", icon: "/icons/lingkungan.png", bgColor: 'bg-tanya-grey', textColor: 'text-black' },
-    { label: "Humaniora", icon: "/icons/humaniora.png", bgColor: 'bg-tanya-yellow', textColor: 'text-white' },
-    { label: "Inspiratif", icon: "/icons/inspiratif.png", bgColor: 'bg-tanya-grey', textColor: 'text-black' },
-  ];
-
   return (
     <div className="bg-white font-sans">
       <Header />
@@ -43,7 +23,6 @@ function App() {
             </button>
           </div>
           <div className="md:w-1/2 mt-12 md:mt-0 flex justify-center">
-            {/* 'src' sekarang menggunakan path string langsung */}
             <img src="/Illustration.png" alt="Hero Illustration" className="w-full max-w-lg" />
           </div>
         </section>
@@ -56,16 +35,13 @@ function App() {
               <span className="block w-full h-1 bg-gray-200 mt-2"></span>
             </h2>
           </div>
-          
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-6 md:px-16">
             {categories.map((cat) => (
               <CategoryCard
-                // Menggunakan 'cat.label' sebagai key yang lebih stabil
-                key={cat.label} 
+                key={cat.label}
                 label={cat.label}
                 icon={cat.icon}
-                bgColor={cat.bgColor}
-                textColor={cat.textColor}
+                colorScheme={cat.colorScheme}
               />
             ))}
           </div>

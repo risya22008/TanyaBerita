@@ -2,26 +2,39 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem; /* 24px */
+  padding: 1.25rem;
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
-  transition: transform 0.2s ease-in-out;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  min-height: 80px;
 }
 
 .card:hover {
-    transform: translateY(-5px);
+  transform: translateY(-4px);
+  box-shadow: 0 6px 12px -2px rgba(0, 0, 0, 0.15);
 }
 
 .label {
   font-weight: 600;
   font-size: 1.1rem;
+  flex: 1;
 }
 
 .iconWrapper {
-  font-size: 2.5rem; /* Ukuran ikon */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 1rem;
 }
 
-/* Modifier classes untuk warna */
+.icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+/* Color schemes */
 .light {
   background-color: var(--color-light-gray);
   color: var(--color-black);
