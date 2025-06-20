@@ -29,9 +29,12 @@ button {
 }
 
 :root {
-  --color-yellow: #facc15;      /* Kuning */
-  --color-dark-gray: #6b7280;   /* Abu-abu tua */
-  --color-light-gray: #f3f4f6;  /* Abu-abu muda */
+  --color-yellow: #facc15;
+  /* Kuning */
+  --color-dark-gray: #6b7280;
+  /* Abu-abu tua */
+  --color-light-gray: #f3f4f6;
+  /* Abu-abu muda */
   --color-white: #ffffff;
   --color-black: #1f2937;
   --color-text-primary: #374151;

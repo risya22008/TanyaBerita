@@ -1,0 +1,17 @@
+export const staticCategories: string[] = [
+  "Berita Umum",
+  "Nasional",
+  "Internasional",
+  "Politik",
+  "Teknologi",
+  "Hiburan",
+  "Olahraga",
+  "Kesehatan",
+  "Pendidikan",
+  "Lifestyle (Gaya Hidup)",
+  "Otomotif",
+  "Hukum & Kriminal",
+  "Lingkungan",
+  "Humaniora",
+  "Inspiratif"
+];

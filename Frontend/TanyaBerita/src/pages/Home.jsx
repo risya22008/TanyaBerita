@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div className="app">
       <Header />
-      
+
       <div className={styles.container}>
         {/* Hero Section */}
         <section className={styles.hero}>
@@ -31,17 +31,17 @@ export default function Home() {
         <h2 className={styles.sectionTitle}>Category</h2>
         <div className={styles.categoryGrid}>
           {categories.map((category, idx) => (
-            <div 
-              key={idx} 
+            <div
+              key={idx}
               className={`${styles.categoryCard} ${styles[category.colorScheme]}`}
             >
               <span className={styles.categoryLabel}>
                 {category.label}
               </span>
               <div className={styles.iconContainer}>
-                <img 
-                  src={category.icon} 
-                  alt={`${category.label} icon`} 
+                <img
+                  src={category.icon}
+                  alt={`${category.label} icon`}
                   className={styles.categoryIcon}
                 />
               </div>

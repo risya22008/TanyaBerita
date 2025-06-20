@@ -1,18 +1,20 @@
 import express from 'express';
-//import { healthRouter, calculatorRouter } from './routes';
-//import { addTimestamp, errorHandler, logger } from './middlewares';
+import dotenv from 'dotenv';
+import categoryRoutes from '../routes/category.routes';
+import articleRoutes from '../routes/article.routes';
+import chatbotRoutes from '../routes/chatbot.routes';
+
+dotenv.config();
+
 const app = express();
-const port = 3000;
-
 app.use(express.json());
-// app.use(addTimestamp);
-// app.use(logger);
 
-// app.use('/health', healthRouter);
-// app.use('/calculator', calculatorRouter);
+app.use('/api', categoryRoutes);
+app.use('/api', articleRoutes);
+app.use('/api', chatbotRoutes);
 
-// app.use(errorHandler);
-
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
+app.get('/', (_req, res) => {
+  res.send('TanyaBerita API is running!');
 });
+
+export default app;
