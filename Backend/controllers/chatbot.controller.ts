@@ -19,4 +19,3 @@ export const handleChatbotAsk = async (
     res.status(500).json({ error: 'Terjadi kesalahan dalam memproses permintaan AI' });
   }
 };
-
