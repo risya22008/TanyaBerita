@@ -1,9 +1,10 @@
-import express from 'express';
-import { getArticles, getArticleDetail } from '../controllers/article.controller';
+// routes/article.route.ts
+import express from 'express'
+import { getArticles, getArticleDetail } from '../controllers/article.controller'
 
-const router = express.Router();
+const router = express.Router()
 
-router.get('/articles', getArticles);
-router.get('/articles/:id', getArticleDetail); 
+router.get('/articles', getArticles)
+router.post('/articles/detail', getArticleDetail)
 
-export default router;
+export default router

@@ -1,11 +1,68 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import CategoryCard from '../components/CategoryCard'
-import categories from './categoriesData'
 import Header from '../components/Header'
 
 function Home() {
   const navigate = useNavigate()
+  const [categories, setCategories] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    fetch('/api/categories')
+      .then((res) => {
+        if (!res.ok) throw new Error('Gagal mengambil data kategori')
+        return res.json()
+      })
+      .then((data) => {
+        console.log('Data kategori dari backend:', data)
+        let arr = data
+        if (data && typeof data === 'object' && !Array.isArray(data)) {
+          if (Array.isArray(data.categories)) {
+            arr = data.categories
+          } else {
+            setError('Format data kategori tidak valid (tidak ditemukan array)')
+            setLoading(false)
+            return
+          }
+        }
+        if (!Array.isArray(arr)) {
+          setError('Format data kategori tidak valid (bukan array)')
+          setLoading(false)
+          return
+        }
+        // Map label ke icon dan colorScheme di frontend
+        const categoryMeta = {
+          "Berita Umum": { icon: "/icons/berita.png", colorScheme: "light" },
+          "Nasional": { icon: "/icons/nasional.png", colorScheme: "yellow" },
+          "Internasional": { icon: "/icons/internasional.png", colorScheme: "dark" },
+          "Politik": { icon: "/icons/politik.png", colorScheme: "light" },
+          "Teknologi": { icon: "/icons/teknologi.png", colorScheme: "yellow" },
+          "Hiburan": { icon: "/icons/hiburan.png", colorScheme: "dark" },
+          "Olahraga": { icon: "/icons/olahraga.png", colorScheme: "light" },
+          "Kesehatan": { icon: "/icons/kesehatan.png", colorScheme: "yellow" },
+          "Pendidikan": { icon: "/icons/pendidikan.png", colorScheme: "dark" },
+          "Lifestyle (Gaya Hidup)": { icon: "/icons/lifestyle.png", colorScheme: "light" },
+          "Otomotif": { icon: "/icons/otomotif.png", colorScheme: "yellow" },
+          "Hukum & Kriminal": { icon: "/icons/hukum.png", colorScheme: "dark" },
+          "Lingkungan": { icon: "/icons/lingkungan.png", colorScheme: "light" },
+          "Humaniora": { icon: "/icons/humaniora.png", colorScheme: "yellow" },
+          "Inspiratif": { icon: "/icons/inspiratif.png", colorScheme: "dark" },
+        }
+        const normalized = arr.map((label) => ({
+          label,
+          icon: categoryMeta[label]?.icon || "/icons/berita.png",
+          colorScheme: categoryMeta[label]?.colorScheme || "light",
+        }))
+        setCategories(normalized)
+        setLoading(false)
+      })
+      .catch((err) => {
+        setError(err.message)
+        setLoading(false)
+      })
+  }, [])
 
   const handleReadNowClick = () => {
     navigate('/articles')
@@ -14,7 +71,6 @@ function Home() {
   return (
     <div className="bg-white font-sans">
       <Header />
-
       <main>
         {/* Hero Section */}
         <section className="px-6 md:px-16 py-20 flex flex-col md:flex-row items-center justify-between">
@@ -45,16 +101,22 @@ function Home() {
               <span className="block w-full h-1 bg-gray-200 mt-2"></span>
             </h2>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-6 md:px-16">
-            {categories.map((cat) => (
-              <CategoryCard
-                key={cat.label}
-                label={cat.label}
-                icon={cat.icon}
-                colorScheme={cat.colorScheme}
-              />
-            ))}
-          </div>
+          {loading ? (
+            <div className="text-center text-gray-500">Loading...</div>
+          ) : error ? (
+            <div className="text-center text-red-500">{error}</div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 px-6 md:px-16">
+              {categories.map((cat) => (
+                <CategoryCard
+                  key={cat.label || cat.id}
+                  label={cat.label}
+                  icon={cat.icon}
+                  colorScheme={cat.colorScheme}
+                />
+              ))}
+            </div>
+          )}
         </section>
       </main>
     </div>

@@ -1,15 +1,18 @@
-import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
-const ArticleCard = ({ title, excerpt, imageUrl }) => {
+const ArticleCard = ({ uri, title, excerpt, imageUrl }) => {
+  const navigate = useNavigate()
+
   return (
-    <div className="bg-white rounded-2xl border p-4 shadow-md hover:shadow-lg transition-all">
-      <img
-        src={imageUrl}
-        alt={title}
-        className="w-full h-40 object-cover rounded-xl mb-3"
-      />
-      <h2 className="font-semibold text-lg mb-1">{title}</h2>
-      <p className="text-sm text-gray-600">{excerpt}</p>
+    <div
+      onClick={() => navigate(`/article/${encodeURIComponent(uri)}`)}
+      className="cursor-pointer border rounded-xl shadow hover:shadow-md transition-all overflow-hidden"
+    >
+      <img src={imageUrl} alt={title} className="w-full h-48 object-cover" />
+      <div className="p-4">
+        <h2 className="text-lg font-semibold mb-2">{title}</h2>
+        <p className="text-sm text-gray-600">{excerpt}</p>
+      </div>
     </div>
   )
 }

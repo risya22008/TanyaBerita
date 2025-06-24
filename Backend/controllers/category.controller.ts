@@ -4,7 +4,7 @@ import { staticCategories } from '../services/category.service';
 
 export const getCategories = (req: Request, res: Response) => {
   try {
-    res.status(200).json({ categories: staticCategories });
+    res.status(200).json(staticCategories);
   } catch (error) {
     console.error('Error fetching categories:', error);
     res.status(500).json({ error: 'Failed to get categories' });

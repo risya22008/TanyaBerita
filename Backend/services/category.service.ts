@@ -13,5 +13,5 @@ export const staticCategories: string[] = [
   "Hukum & Kriminal",
   "Lingkungan",
   "Humaniora",
-  "Inspiratif"
+  "Inspiratif",
 ];

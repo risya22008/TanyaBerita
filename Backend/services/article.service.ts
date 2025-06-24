@@ -7,6 +7,20 @@ const NEWS_API_URL = 'https://eventregistry.org/api/v1/article/getArticles';
 const ARTICLE_DETAIL_URL = 'https://eventregistry.org/api/v1/article/getArticle';
 const NEWS_API_KEY = process.env.NEWS_API_KEY || '';
 
+
+
+// Tipe artikel yang digunakan secara umum
+export type Article = {
+  uri: string;
+  title: string;
+  url: string;
+  source: string;
+  dateTime: string;
+  body: string;
+  image: string;
+};
+
+// Pemetaan kategori ke kata kunci pencarian
 const categoryKeywordMap: Record<string, string> = {
   "Berita Umum": "general",
   "Nasional": "Indonesia",
@@ -25,15 +39,73 @@ const categoryKeywordMap: Record<string, string> = {
   "Inspiratif": "inspiration"
 };
 
+// Tipe response dari Event Registry saat ambil daftar artikel
+type NewsApiResponse = {
+  articles?: {
+    results?: {
+      uri: string;
+      title: string;
+      url: string;
+      dateTime: string;
+      body: string;
+      image: string;
+      source?: {
+        title?: string;
+      };
+    }[];
+  };
+};
+
+// Tipe response saat ambil artikel detail
+export type ArticleDetailResponse = {
+  [key: string]: {
+    info: {
+      uri: string;
+      lang: string;
+      isDuplicate: boolean;
+      date: string;
+      time: string;
+      dateTime: string;
+      dateTimePub: string;
+      dataType: string;
+      sim: number;
+      url: string;
+      title: string;
+      body: string;
+      source?: {
+        uri?: string;
+        dataType?: string;
+        title?: string;
+      };
+      authors?: {
+        uri?: string;
+        name?: string;
+        type?: string;
+        isAgency?: boolean;
+      }[];
+      image: string;
+      eventUri: string | null;
+      sentiment: number;
+    };
+  };
+};
+
+
+// Fungsi untuk mengambil daftar artikel
 export const getArticlesFromNewsApi = async (
   category?: string,
   page: number = 1,
   count: number = 10
-): Promise<any[]> => {
+): Promise<Article[]> => {
+  if (!NEWS_API_KEY) {
+    console.error('[ArticleService] Missing NEWS_API_KEY');
+    throw new Error('Missing NEWS_API_KEY');
+  }
+
   try {
     const keyword = category ? categoryKeywordMap[category] || category : '';
 
-    const response = await axios.get(NEWS_API_URL, {
+    const response = await axios.get<NewsApiResponse>(NEWS_API_URL, {
       params: {
         apiKey: NEWS_API_KEY,
         keywords: keyword,
@@ -43,48 +115,74 @@ export const getArticlesFromNewsApi = async (
       }
     });
 
-    const data = response.data as any;
-    const articles = data.articles?.results || [];
+    const results = response.data.articles?.results || [];
 
-    return articles.map((article: any) => ({
-      id: article.uri,
-      title: article.title,
-      url: article.url,
-      source: article.source?.title || '',
-      dateTime: article.dateTime,
-      body: article.body,
-      image: article.image
+    return results.map((item): Article => ({
+      uri: item.uri,
+      title: item.title,
+      url: item.url,
+      source: item.source?.title || '',
+      dateTime: item.dateTime,
+      body: item.body,
+      image: item.image
     }));
   } catch (error) {
-    console.error('Error fetching articles:', error);
+    console.error('[ArticleService] Error fetching articles:', error);
     return [];
   }
 };
 
-export const getArticleById = async (id: string): Promise<any | null> => {
+// Fungsi untuk mengambil artikel berdasarkan URI
+export const getArticleByUri = async (uri: string): Promise<Article | null> => {
+  if (!NEWS_API_KEY) {
+    console.error('[ArticleService] Missing NEWS_API_KEY');
+    throw new Error('Missing NEWS_API_KEY');
+  }
+
   try {
-    const response = await axios.get(ARTICLE_DETAIL_URL, {
-      params: {
+    const response = await axios.post<ArticleDetailResponse>(
+      ARTICLE_DETAIL_URL,
+      {
+        action: 'getArticle',
+        articleUri: uri,
+        resultType: 'info',
+        infoArticleBodyLen: -1,
         apiKey: NEWS_API_KEY,
-        articleUri: id
+        includeArticleTitle: true,
+        includeArticleBasicInfo: true,
+        includeArticleBody: true,
+        includeArticleImage: true,
+        includeSourceTitle: true
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json'
+        }
       }
-    });
-
-    const article = (response.data as any).article;
-
-    if (!article) return null;
+    );
+    console.log(`[ArticleService] Fetched article by URI: ${uri}`);
+    //console.log(response);
+    const data = response.data;
+    const keys = Object.keys(data);
+    const articleInfo = data[keys[0]].info;
+    // console.log(response.data);
+    console.log(articleInfo);
+    if (!articleInfo) {
+      console.warn(`[ArticleService] No article found for URI: ${uri}`);
+      return null;
+    }
 
     return {
-      id: article.uri,
-      title: article.title,
-      url: article.url,
-      source: article.source?.title || '',
-      dateTime: article.dateTime,
-      body: article.body,
-      image: article.image
+      uri: articleInfo.uri,
+      title: articleInfo.title,
+      url: articleInfo.url,
+      source: articleInfo.source?.title || '',
+      dateTime: articleInfo.dateTime,
+      body: articleInfo.body,
+      image: articleInfo.image
     };
   } catch (error) {
-    console.error('Error fetching article by ID:', error);
+    console.error(`[ArticleService] Error fetching article by URI: ${uri}`, error);
     return null;
   }
 };
